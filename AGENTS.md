@@ -31,7 +31,7 @@ start time (`date`) and asking for the starting mood and energy (see
 - Work one step at a time: explain the concept, add the failing test(s) for
   that step only, then let the user implement.
 - After each attempt, run `./gradlew test --tests '...'` and explain any
-  failure.
+  failure. Report the result with Remo's colour (see "Mascot: Remo").
 - Give hints only when asked, and make them more specific each time: the
   concept, then the API to look at, then the shape of the code. Never write
   the solution.
@@ -64,8 +64,40 @@ improvements; the user decides which to apply.
   docs, recognized industry engineering blogs); check every link.
 - Ground the document in the exercise's "What you'll learn" points and what
   was actually discussed. Match the format of earlier documents in `docs/`.
+- End the document with Remo's strip (see "Mascot: Remo").
 - Update README.md: mark the exercise "— solved" and link its document.
 - Commit and open a pull request only when the user asks.
+
+## Mascot: Remo
+
+Remo is an original chameleon character who changes colour with the tests:
+red while anything fails, yellow while work is in progress (making it pass,
+refactoring), green when everything passes. Keep him light: a status marker
+and a storyteller, never filler.
+
+- **Test runs:** `app/build.gradle.kts` prints Remo's status after every test
+  run. When reporting results to the user, lead with it: `🔴 Remo is red: 2
+  of 9 failing` or `🟢 Remo is green: 9 of 9 passing`.
+- **Remo's strip:** every exercise document ends with three panels in the
+  spirit of two cheerful builders who make a mess and rebuild it better. Use
+  only real events from the sessions (failing tests, wrong turns, rework, AI
+  mistakes); never invent mess for the joke.
+
+  ```markdown
+  ## Remo's strip
+
+  | <img src="assets/remo.svg" width="120" alt="Remo building"> | <img src="assets/remo-red.svg" width="120" alt="Remo red"> | <img src="assets/remo-green.svg" width="120" alt="Remo green"> |
+  |---|---|---|
+  | **Built it:** what was first built | **Broke it:** what went wrong | **Fixed it:** how it was redone better |
+  ```
+
+- **Mood colours:** in session logs and the stats page, mood 1–2 is 🔴, 3 is
+  🟡, and 4–5 is 🟢. The stats page shows Remo's colour journey across
+  sessions.
+- **Assets:** `docs/assets/logo.svg` (text as outlines, for the README),
+  `docs/assets/source/logo-editable-text.svg` (editable text; regenerate the
+  outlined logo with `usvg` from [resvg](https://github.com/linebender/resvg)),
+  and `docs/assets/remo.svg`, `remo-red.svg`, `remo-green.svg`.
 
 ## Session log
 
@@ -137,7 +169,8 @@ When the last exercise is finished and the user asks, build
 [series status page](https://github.com/otto-horvath/jvm-exercises/blob/master/docs/series-status.md):
 scoreboard, per-exercise checkpoints, timeline, stack and tools, plus a new
 **AI impact** section aggregated from the session logs (time, mood,
-confidence gains, helpfulness by tool and model, hints, AI mistakes) with
+confidence gains, helpfulness by tool and model, hints, AI mistakes, Remo's
+colour journey) with
 the user's own opinion. Label every figure as observed, reported, or
 estimated.
 

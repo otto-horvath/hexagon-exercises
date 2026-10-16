@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/logo.svg" alt="hexagon-exercises: Remo the chameleon on a ports-and-adapters hexagon" width="720">
+</p>
+
 # Hexagonal Architecture Exercises
 
 A test-first series for learning hexagonal architecture (ports and adapters)
@@ -13,6 +17,22 @@ The series follows the same approach as
 the behavior, the learner writes the production code, and each finished
 exercise gets a learnings guide under `docs/`. See [AGENTS.md](AGENTS.md) for
 the full workflow.
+
+## Meet Remo 🦎
+
+<img src="docs/assets/remo.svg" align="right" width="160" alt="Remo the chameleon, fading from red to green">
+
+Remo is the series mascot: a chameleon who changes colour with the tests.
+
+- **Red:** a failing test defines the next step.
+- **Yellow:** work in progress, making it pass or refactoring.
+- **Green:** every test passes.
+
+Remo reports every `./gradlew test` run. Each exercise guide ends with
+*Remo's strip*: **Built it → Broke it → Fixed it**, the real mess and redo of
+that exercise, because learning is mostly building something, breaking it,
+and rebuilding it better. His colours also mark the mood in the
+[session logs](docs/sessions/).
 
 ## The domain
 

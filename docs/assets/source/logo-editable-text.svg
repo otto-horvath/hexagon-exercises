@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="180" viewBox="0 0 720 180" role="img" aria-label="hexagon-exercises logo: Remo the chameleon on a ports-and-adapters hexagon">
+  <title>hexagon-exercises</title>
+  <defs><linearGradient id="skin" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="170" y2="0"><stop offset="0" stop-color="#ef4444"/><stop offset="0.35" stop-color="#ef4444"/><stop offset="0.5" stop-color="#eab308"/><stop offset="0.65" stop-color="#22c55e"/><stop offset="1" stop-color="#22c55e"/></linearGradient></defs>
+  <rect width="720" height="180" rx="24" fill="#0b1220"/>
+  <g transform="translate(16 11)">
+    <g stroke="#334155" stroke-width="3">
+      <line x1="43.5" y1="73" x2="64.5" y2="85"/>
+      <line x1="43.5" y1="127" x2="64.5" y2="115"/>
+      <line x1="136.5" y1="73" x2="115.5" y2="85"/>
+      <line x1="136.5" y1="127" x2="115.5" y2="115"/>
+    </g>
+    <polygon points="152,100 121,153.7 59,153.7 28,100 59,46.3 121,46.3" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linejoin="round"/>
+    <polygon points="124,100 107,129.4 73,129.4 56,100 73,70.6 107,70.6" fill="#0ea5e9"/>
+    <text x="90" y="112" text-anchor="middle" font-family="Ubuntu, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="32" font-weight="700" fill="#ffffff">%</text>
+    <g fill="#a78bfa" stroke="#0b1220" stroke-width="3">
+      <circle cx="43.5" cy="73" r="9"/><circle cx="43.5" cy="127" r="9"/>
+    </g>
+    <g fill="#34d399" stroke="#0b1220" stroke-width="3">
+      <circle cx="136.5" cy="73" r="9"/><circle cx="136.5" cy="127" r="9"/>
+    </g>
+    <g transform="translate(41 -9) scale(0.45)">
+  <path d="M58 96 C30 98 18 116 24 132 C30 148 54 148 58 134 C61 124 50 118 44 124 C40 129 45 134 49 131" fill="none" stroke="url(#skin)" stroke-width="11" stroke-linecap="round"/>
+  <g stroke="url(#skin)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M80 100 L72 118"/>
+    <path d="M64 120 L72 118 L80 124"/>
+    <path d="M140 100 L148 118"/>
+    <path d="M140 124 L148 118 L156 120"/>
+  </g>
+  <path d="M52 92 C54 62 90 46 126 50 C142 52 150 30 170 32 L198 78 C192 92 172 98 150 98 C126 108 82 110 52 92 Z" fill="url(#skin)"/>
+  <path d="M64 96 C92 104 124 102 146 94" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"/>
+  <path d="M174 88 C184 88 192 84 196 79" fill="none" stroke="#0b1220" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="166" cy="62" r="15" fill="#16a34a"/>
+  <circle cx="167" cy="62" r="10" fill="#ffffff"/>
+  <circle cx="170" cy="62" r="4.5" fill="#0b1220"/>
+    </g>
+  </g>
+  <text x="210" y="98" font-family="Ubuntu, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="53" font-weight="700" fill="#f8fafc">hexagon<tspan fill="#38bdf8">-</tspan>exercises</text>
+  <text x="212" y="134" font-family="Ubuntu, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" fill="#94a3b8">ports &amp; adapters in modern Java, test-first</text>
+</svg>
