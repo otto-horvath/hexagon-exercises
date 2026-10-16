@@ -213,23 +213,34 @@ and an honest opinion on the AI-assisted workflow.
 
 ## References
 
-- Alistair Cockburn, *Hexagonal Architecture* (2005), the original article.
-- Alistair Cockburn and Juan Manuel Garrido de Paz, *Hexagonal Architecture
-  Explained* (2024).
-- Tom Hombergs, *Get Your Hands Dirty on Clean Architecture*, 2nd edition
-  (2023).
-- Netflix Technology Blog, *Ready for changes with Hexagonal Architecture*
+- Alistair Cockburn,
+  [*Hexagonal Architecture*](https://alistair.cockburn.us/hexagonal-architecture/)
+  (2005), the original article.
+- Alistair Cockburn and Juan Manuel Garrido de Paz,
+  [*Hexagonal Architecture Explained*](https://alistaircockburn.com/Books)
+  (2024; updated edition 2025), listed on the author's books page.
+- Tom Hombergs,
+  [*Get Your Hands Dirty on Clean Architecture*](https://reflectoring.io/book/),
+  2nd edition.
+- Netflix Technology Blog,
+  [*Ready for changes with Hexagonal Architecture*](https://netflixtechblog.com/ready-for-changes-with-hexagonal-architecture-b315ec967749)
   (2020).
-- Herberto Graça, *DDD, Hexagonal, Onion, Clean, CQRS, … How I put it all
-  together* (2017).
-- Steve Freeman and Nat Pryce, *Growing Object-Oriented Software, Guided by
-  Tests* (2009).
-- Martin Fowler, *Mocks Aren't Stubs* and *ContractTest*.
-- Eric Evans, *Domain-Driven Design* (2003): value objects and
-  anti-corruption layers.
-- Chris Richardson, microservices.io, *Pattern: Transactional outbox*.
-- Brandur Leach, Stripe blog, *Designing robust and predictable APIs with
-  idempotency* (2017).
+- Herberto Graça,
+  [*DDD, Hexagonal, Onion, Clean, CQRS, … How I put it all together*](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/)
+  (2017).
+- Steve Freeman and Nat Pryce,
+  [*Growing Object-Oriented Software, Guided by Tests*](http://www.growing-object-oriented-software.com/)
+  (2009).
+- Martin Fowler,
+  [*Mocks Aren't Stubs*](https://martinfowler.com/articles/mocksArentStubs.html)
+  and [*ContractTest*](https://martinfowler.com/bliki/ContractTest.html).
+- Eric Evans, [*Domain-Driven Design*](https://www.domainlanguage.com/ddd/)
+  (2003): value objects and anti-corruption layers.
+- Chris Richardson, microservices.io,
+  [*Pattern: Transactional outbox*](https://microservices.io/patterns/data/transactional-outbox.html).
+- Brandur Leach, Stripe blog,
+  [*Designing robust and predictable APIs with idempotency*](https://stripe.com/blog/idempotency)
+  (2017).
 
 Each exercise guide links the specific sources it relies on.
 
