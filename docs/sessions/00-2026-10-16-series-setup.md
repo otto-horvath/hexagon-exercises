@@ -1,8 +1,8 @@
 ---
 session: 0
 date: 2026-10-16
-start: null               # unknown: the session began in jvm-exercises; this repo was created at 00:29 (observed)
-end: "01:20"              # observed, local time (-03:00)
+start: "00:17"            # observed: first Claude Code request; the session began in jvm-exercises
+end: "01:21"              # observed, local time (-03:00)
 active_minutes: null      # unknown: "< 30 min" reported up to 00:51; logo and mascot work after that not measured
 exercise: null
 phases: [setup]
@@ -24,7 +24,22 @@ ai:
 stack_added: [Gradle 9.2.0, JUnit Jupiter 5.12.1, AssertJ 3.27.3, Spotless 8.10.4, JSpecify 1.0.0] # observed
 tests_passing: 0          # observed: no tests yet
 score: null
-commits: [6115f4a, 22b8da2, 9c8d1dc, jvm-exercises@c58f28a] # observed; plus the commit adding Remo
+commits: [6115f4a, 22b8da2, 9c8d1dc, 3cdd7f5, jvm-exercises@c58f28a] # observed; plus the commit adding usage tracking
+claude_usage:
+  sessions: [8a2bab0a]  # observed, Claude Code session ids
+  first_request: "2026-10-16 00:17"  # observed, local time
+  last_request: "2026-10-16 01:20"   # observed, local time
+  wall_clock_minutes: 64  # observed, first to last request, includes idle time
+  requests: 93  # observed
+  input_tokens: 186  # observed
+  cache_write_5m_tokens: 218687  # observed
+  cache_write_1h_tokens: 0  # observed
+  cache_read_tokens: 9862392  # observed
+  output_tokens: 90604  # observed
+  web_searches: 0  # observed; Claude Code's own WebSearch tool is not recorded here
+  cost_usd_estimated: 4.88  # estimated: tokens x API list price checked 2026-10-16
+  cost_usd_reported: null  # reported: user to read /cost; not given yet
+  billing: api  # reported
 ---
 
 ## Highlights
@@ -68,6 +83,10 @@ commits: [6115f4a, 22b8da2, 9c8d1dc, jvm-exercises@c58f28a] # observed; plus the
 
 ## Notes
 - Session data collection was added to AGENTS.md during this session, so
-  start time and starting mood were not captured.
+  starting mood was not captured. The start time was recovered later from
+  the Claude Code transcript.
+- Claude usage tracking (`scripts/claude_usage.py`) was added at the end of
+  this session; its block below covers the whole conversation, which began
+  with the jvm-exercises review.
 - Remo is inspired by the user's lizard tattoo and the build-break-rebuild
   spirit of the Pat & Mat cartoons, but is an original character.

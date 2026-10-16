@@ -117,6 +117,20 @@ entry.
   (the user said it), or `estimated` (derived, with the method stated).
 - Record your own mistakes (wrong or overstated claims corrected during the
   session) honestly; they count toward the AI evaluation.
+- **Claude usage:** for every session that used Claude Code, run
+  `python3 -I scripts/claude_usage.py` and paste its `claude_usage` block
+  into the front matter. It reads the session's transcripts, including
+  subagents, and reports the session ids, wall-clock span, requests and
+  tokens (observed), plus a cost estimate at API list prices. Pass
+  `--session <id>` (repeatable) or `--since`/`--until` for a precise window,
+  and `--project-dir` when the session started in another directory. Then
+  ask the user for the exact figure from Claude Code's `/cost` or their
+  billing page, and whether they pay per API token or by subscription. On a
+  subscription the estimate is the API-equivalent value, not money spent.
+- Keep the script's price table current: when the model changes or prices
+  may have changed, check the pricing page linked in the script and update
+  `PRICES` and `PRICES_CHECKED`. Never guess a price; an unknown model is
+  reported as unpriced.
 
 ```markdown
 ---
@@ -149,6 +163,21 @@ stack_added: [ArchUnit 1.4.1] # observed, from the build
 tests_passing: 18         # observed, full suite at session end
 score: 4                  # observed, if evaluated this session
 commits: [abc1234]        # observed
+claude_usage:             # from scripts/claude_usage.py, plus the two reported fields
+  sessions: [8a2bab0a]
+  first_request: "2026-10-20 19:04"
+  last_request: "2026-10-20 20:39"
+  wall_clock_minutes: 95
+  requests: 64
+  input_tokens: 120
+  cache_write_5m_tokens: 150000
+  cache_write_1h_tokens: 0
+  cache_read_tokens: 5200000
+  output_tokens: 61000
+  web_searches: 0
+  cost_usd_estimated: 3.01 # estimated: tokens x API list price checked 2026-10-16
+  cost_usd_reported: 2.95  # reported, from /cost
+  billing: api             # reported: api | subscription
 ---
 
 ## Highlights
@@ -169,10 +198,9 @@ When the last exercise is finished and the user asks, build
 [series status page](https://github.com/otto-horvath/jvm-exercises/blob/master/docs/series-status.md):
 scoreboard, per-exercise checkpoints, timeline, stack and tools, plus a new
 **AI impact** section aggregated from the session logs (time, mood,
-confidence gains, helpfulness by tool and model, hints, AI mistakes, Remo's
-colour journey) with
-the user's own opinion. Label every figure as observed, reported, or
-estimated.
+confidence gains, helpfulness by tool and model, hints, AI mistakes, Claude
+usage and cost per session and per exercise, Remo's colour journey) with the
+user's own opinion. Label every figure as observed, reported, or estimated.
 
 ## Style
 

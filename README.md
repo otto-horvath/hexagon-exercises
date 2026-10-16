@@ -227,7 +227,9 @@ and Kafka.
 ## Session log and series stats
 
 Every working session is logged under [docs/sessions/](docs/sessions/):
-time, mood, confidence, tech added, and how the AI tools and models helped.
+time, mood, confidence, tech added, how the AI tools and models helped, and
+what each Claude Code session used in tokens and cost
+([scripts/claude_usage.py](scripts/claude_usage.py)).
 When the series is finished, those logs feed a series status page with data
 and an honest opinion on the AI-assisted workflow.
 
