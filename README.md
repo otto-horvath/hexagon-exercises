@@ -6,6 +6,8 @@ across the exercises. Each step adds a port, an adapter, or a technology, and
 all earlier tests must keep passing. The project targets Java 25, plain JDK
 first, with a framework only as a final bonus.
 
+[![Java CI with Gradle](https://github.com/otto-horvath/hexagon-exercises/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/otto-horvath/hexagon-exercises/actions/workflows/gradle.yml)
+
 The series follows the same approach as
 [jvm-exercises](https://github.com/otto-horvath/jvm-exercises): tests define
 the behavior, the learner writes the production code, and each finished
