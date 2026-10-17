@@ -22,9 +22,9 @@ the README; it is not split into per-exercise packages.
   and where it sits in the hexagon (domain, driving port, driven port,
   adapter).
 
-Every session, not only the first one of an exercise, starts by recording the
-start time (`date`) and asking for the starting mood and energy (see
-"Session log").
+When session logging is on (see "Session log"), every session, not only the
+first one of an exercise, starts by recording the start time (`date`) and
+asking for the starting mood and energy.
 
 ## 2. Guide step by step
 
@@ -105,6 +105,12 @@ The series ends with a stats page showing how much the LLM models and tools
 helped. That needs data collected while working, so every session gets a log
 entry.
 
+Session logging is the author's own study of AI-assisted learning, not part of
+the exercises. It is on when `origin` is `otto-horvath/hexagon-exercises`. In
+any other clone or fork, ask once per conversation whether the user wants a
+session log; if not, skip this section, the mood questions, and the AI impact
+section of the series status page.
+
 - **When:** at the end of every working session, whatever the phase. Ask the
   user before closing a session that has no entry yet.
 - **Where:** `docs/sessions/NN-YYYY-MM-DD-<slug>.md`, numbered from `00`, with
@@ -117,6 +123,12 @@ entry.
   (the user said it), or `estimated` (derived, with the method stated).
 - Record your own mistakes (wrong or overstated claims corrected during the
   session) honestly; they count toward the AI evaluation.
+- The repo is public. Session data such as mood, time, and cost is fine to
+  publish, but never write secrets into logs, docs, commits, or code: tokens,
+  API keys, passwords, credentials, private keys, or connection strings. Leave
+  out anything that exposes the environment, such as hostnames, IP addresses,
+  account ids, or private paths beyond the project. If tool output contains
+  one, redact it as `[redacted]` before writing.
 - **Claude usage:** for every session that used Claude Code, run
   `python3 -I scripts/claude_usage.py` and paste its `claude_usage` block
   into the front matter. It reads the session's transcripts, including

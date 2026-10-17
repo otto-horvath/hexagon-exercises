@@ -233,6 +233,10 @@ what each Claude Code session used in tokens and cost
 When the series is finished, those logs feed a series status page with data
 and an honest opinion on the AI-assisted workflow.
 
+Session logging is optional and not needed to do the exercises. In your own
+fork, agents ask before logging; delete `docs/sessions/` if you don't want the
+author's logs.
+
 ## References
 
 - Alistair Cockburn,
@@ -284,3 +288,24 @@ Run one test class while working on an exercise:
 Code is formatted with [Spotless](https://github.com/diffplug/spotless) using
 Palantir Java Format: run `./gradlew spotlessApply` to format. `./gradlew
 build` includes `spotlessCheck`, so CI fails on unformatted code.
+
+## License
+
+Copyright © 2026 Otto Horvath. Original source:
+<https://github.com/otto-horvath/hexagon-exercises>.
+
+All content in this repository, including code, exercises, docs, and Remo the
+chameleon, is licensed under
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). See
+[LICENSE](LICENSE). The exception is the Gradle wrapper (`gradlew`,
+`gradlew.bat`, `gradle/wrapper/`), which keeps its own Apache-2.0 license,
+and [scripts/claude_usage.py](scripts/claude_usage.py), which is
+[MIT](https://opensource.org/license/mit) so anyone can use it freely,
+including at work.
+
+Feel free to fork, run, change, and share it. Keep the credit to the author,
+link to the original source, and share your changes under the same license.
+
+**Teaching note:** paid teaching using this material, such as courses,
+workshops, mentoring, and company training, is fine. Selling the material
+itself, or a repackaged version of it, is not.

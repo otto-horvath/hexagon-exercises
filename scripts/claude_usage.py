@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Otto Horvath
+# https://github.com/otto-horvath/hexagon-exercises
+
 """Summarize Claude Code usage for the session log.
 
 Reads Claude Code transcripts (JSONL files under ~/.claude/projects/) and
@@ -11,6 +15,8 @@ Usage:
 
 Times without an offset are local time. Standard library only.
 """
+
+from __future__ import annotations
 
 import argparse
 import json
