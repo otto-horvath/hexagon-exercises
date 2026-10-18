@@ -121,6 +121,11 @@ section of the series status page.
   its source. Do not confuse planned duration with active minutes.
 - **Where:** `docs/sessions/NN-YYYY-MM-DD-<slug>.md`, numbered from `00`, with
   the YAML front matter and sections from the template below.
+- **Title and personal notes:** give each session a concise title drawn from a
+  memorable user phrase or insight from the conversation; it need not be about
+  coding. Put it in the YAML front matter and use it in the document heading.
+  Preserve meaningful personal reflections the user shares in `Notes`, with
+  their reported source and without inventing details.
 - **How:** fill observed fields yourself from `date`, `git`, the build, and
   the environment (your own agent and model). Ask the user for the reported
   fields with a short questionnaire. Never invent a value: use `null` when
@@ -163,6 +168,7 @@ section of the series status page.
 ```markdown
 ---
 session: 3
+title: "Now that you know the solution, what would you do differently?" # reported phrase or insight
 date: 2026-10-20
 start: "19:05"            # observed, local time (-03:00)
 end: "20:40"              # observed
@@ -207,6 +213,8 @@ claude_usage:             # from scripts/claude_usage.py, plus the two reported 
   cost_usd_reported: 2.95  # reported, from /cost
   billing: api             # reported: api | subscription
 ---
+
+# Session 3 — Now that you know the solution, what would you do differently?
 
 ## Highlights
 What got done and what clicked.

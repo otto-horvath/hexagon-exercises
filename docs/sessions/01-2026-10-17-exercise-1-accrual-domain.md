@@ -1,5 +1,6 @@
 ---
 session: 1
+title: "Now that you know the solution, what would you do differently?" # reported reflection question
 date: 2026-10-17 # observed: local date at session start
 start: "20:00" # reported by user as 8pm BRT (-03:00); first date capture was 20:52
 end: "00:48" # observed, local time (-03:00), following calendar day
@@ -26,6 +27,8 @@ tests_passing: 26 # observed: full build after the final code refactor
 score: 4 # observed: Exercise 1 evaluation
 commits: [6b4fdb5] # observed: Exercise 1 implementation and guide commit; session log committed separately
 ---
+
+# Session 1 — Now that you know the solution, what would you do differently?
 
 ## Highlights
 
