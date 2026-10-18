@@ -3,8 +3,8 @@ session: 1
 title: "Now that you know the solution, what would you do differently?" # reported reflection question
 date: 2026-10-17 # observed: local date at session start
 start: "20:00" # reported by user as 8pm BRT (-03:00); first date capture was 20:52
-end: "01:10" # observed, local time (-03:00), following calendar day
-active_minutes: 220 # estimated: 20:00 to 01:10 = 310 minutes elapsed, minus user's reported 90-minute cooking/dinner break
+end: "01:14" # observed, local time (-03:00), following calendar day
+active_minutes: 224 # estimated: 20:00 to 01:14 = 314 minutes elapsed, minus user's reported 90-minute cooking/dinner break
 exercise: 1
 phases: [start, guide, evaluate, wrap-up]
 mood_start: 3 # reported, 1–5; initially described as curious and calm
@@ -25,7 +25,7 @@ ai:
 stack_added: [] # observed: no dependencies added in Exercise 1
 tests_passing: 26 # observed: full build after the final code refactor
 score: 4 # observed: Exercise 1 evaluation
-commits: [6b4fdb5] # observed: Exercise 1 implementation and guide commit; session log committed separately
+commits: [6b4fdb5, bcccdcd, 91c05ac, 0cf45dd, c0f5602, bca1104, 2bc5459, 2af25c7, e980f03, 6378d1b, b948313] # observed: session commits, including the post-merge schedule update
 ---
 
 # Session 1 — Now that you know the solution, what would you do differently?
