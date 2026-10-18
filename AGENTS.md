@@ -24,7 +24,7 @@ the README; it is not split into per-exercise packages.
 
 When session logging is on (see "Session log"), every session, not only the
 first one of an exercise, starts by recording the start time (`date`) and
-asking for the starting mood and energy.
+asking for starting mood, energy, and confidence before the exercise topic.
 
 ## 2. Guide step by step
 
@@ -125,6 +125,12 @@ section of the series status page.
   the environment (your own agent and model). Ask the user for the reported
   fields with a short questionnaire. Never invent a value: use `null` when
   unknown or skipped, and never guess the user's mood or opinion.
+- **Rating check-ins:** at session start, explicitly ask for mood, energy, and
+  confidence before the exercise topic on the template's 1–5 scales. At session
+  end, ask for mood, confidence after, AI helpfulness, and actual active
+  minutes. If the user answers with qualitative words instead of a number,
+  follow up for the rating or preserve the words and use `null`; do not infer a
+  numeric score. Keep planned duration separate from active minutes.
 - Mark each value's source in a comment: `observed` (from tools), `reported`
   (the user said it), or `estimated` (derived, with the method stated).
 - When the user notices that different models or tools reached similar
