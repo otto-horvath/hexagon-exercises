@@ -112,7 +112,7 @@ optional bonus in week four.
 
 ## Exercises
 
-### 1. Accrual domain
+### 1. Accrual domain — solved
 
 Model money, rates, and day-count conventions, and calculate one day of
 interest for a balance. No ports and no I/O: just the core.
@@ -127,6 +127,9 @@ interest for a balance. No ports and no I/O: just the core.
 - Cover conventions and edge cases with parameterized tests.
 
 **New in this step:** Gradle, JUnit 5, AssertJ, parameterized tests.
+
+See the [Exercise 1 guide](docs/exercise-1-accrual-domain.md) for the domain
+decisions, precision policy, and lessons from the implementation.
 
 ### 2. Accrue-interest use case
 
