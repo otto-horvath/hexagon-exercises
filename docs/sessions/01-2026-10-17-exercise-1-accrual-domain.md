@@ -20,8 +20,8 @@ ai:
   helpfulness: 4 # reported, 1–5
   hints_requested: null # not formally counted during the session
   hint_levels: [concept, api, code-shape] # observed
-  ai_wrote: [tests, scaffold, production-refactor, exercise-guide, session-log] # observed; production refactor explicitly authorized by user
-  ai_mistakes: 4 # observed: initially weak Money test, string-switch recommendation, missing test import, stale patch context
+  ai_wrote: [tests, scaffold, production-refactor, exercise-guide, session-log, agent-instructions] # observed; production refactor explicitly authorized by user
+  ai_mistakes: 5 # observed: initially weak Money test, string-switch recommendation, missing test import, stale patch context, failed to prompt for numeric session ratings
 stack_added: [] # observed: no dependencies added in Exercise 1
 tests_passing: 26 # observed: full build after the final code refactor
 score: 4 # observed: Exercise 1 evaluation
