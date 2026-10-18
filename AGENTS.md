@@ -24,7 +24,7 @@ the README; it is not split into per-exercise packages.
 
 When session logging is on (see "Session log"), every session, not only the
 first one of an exercise, starts by recording the start time (`date`) and
-asking for the starting mood and energy.
+asking for starting mood, energy, and confidence before the exercise topic.
 
 ## 2. Guide step by step
 
@@ -113,14 +113,35 @@ section of the series status page.
 
 - **When:** at the end of every working session, whatever the phase. Ask the
   user before closing a session that has no entry yet.
+- **Start capture:** at the beginning of each logged session, before repository
+  exploration or other task work, run `date '+%Y-%m-%d %H:%M %Z'` and retain
+  the observed local date, time, and timezone for the session entry. If the
+  capture happens after work began, do not present it as the start time; keep
+  the observed capture time and record any user-reported start separately with
+  its source. Do not confuse planned duration with active minutes.
 - **Where:** `docs/sessions/NN-YYYY-MM-DD-<slug>.md`, numbered from `00`, with
   the YAML front matter and sections from the template below.
+- **Title and personal notes:** give each session a concise title drawn from a
+  memorable user phrase or insight from the conversation; it need not be about
+  coding. Put it in the YAML front matter and use it in the document heading.
+  Preserve meaningful personal reflections the user shares in `Notes`, with
+  their reported source and without inventing details.
 - **How:** fill observed fields yourself from `date`, `git`, the build, and
   the environment (your own agent and model). Ask the user for the reported
   fields with a short questionnaire. Never invent a value: use `null` when
   unknown or skipped, and never guess the user's mood or opinion.
+- **Rating check-ins:** at session start, explicitly ask for mood, energy, and
+  confidence before the exercise topic on the template's 1–5 scales. At session
+  end, ask for mood, confidence after, AI helpfulness, and actual active
+  minutes. If the user answers with qualitative words instead of a number,
+  follow up for the rating or preserve the words and use `null`; do not infer a
+  numeric score. Keep planned duration separate from active minutes.
 - Mark each value's source in a comment: `observed` (from tools), `reported`
   (the user said it), or `estimated` (derived, with the method stated).
+- When the user notices that different models or tools reached similar
+  decisions, record it as a user-reported observation in the session notes.
+  Name other models only when the user identifies them, and do not treat
+  agreement between models as evidence that a decision is correct.
 - Record your own mistakes (wrong or overstated claims corrected during the
   session) honestly; they count toward the AI evaluation.
 - The repo is public. Session data such as mood, time, and cost is fine to
@@ -147,6 +168,7 @@ section of the series status page.
 ```markdown
 ---
 session: 3
+title: "Now that you know the solution, what would you do differently?" # reported phrase or insight
 date: 2026-10-20
 start: "19:05"            # observed, local time (-03:00)
 end: "20:40"              # observed
@@ -191,6 +213,8 @@ claude_usage:             # from scripts/claude_usage.py, plus the two reported 
   cost_usd_reported: 2.95  # reported, from /cost
   billing: api             # reported: api | subscription
 ---
+
+# Session 3 — Now that you know the solution, what would you do differently?
 
 ## Highlights
 What got done and what clicked.
