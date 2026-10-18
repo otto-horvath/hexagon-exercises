@@ -2,7 +2,7 @@
 session: 1
 date: 2026-10-17 # observed: local date at session start
 start: "20:52" # observed, local time (-03:00)
-end: null # observed end time to be filled when the draft PR is ready
+end: "00:48" # observed, local time (-03:00), following calendar day
 active_minutes: null # user planned 40 minutes; actual focused time not reported, cooking/wine break occurred
 exercise: 1
 phases: [start, guide, evaluate, wrap-up]
