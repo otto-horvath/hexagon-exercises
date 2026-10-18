@@ -3,20 +3,20 @@ session: 1
 date: 2026-10-17 # observed: local date at session start
 start: "20:00" # reported by user as 8pm BRT (-03:00); first date capture was 20:52
 end: "00:48" # observed, local time (-03:00), following calendar day
-active_minutes: null # user planned 40 minutes; actual focused time not reported, cooking/wine break occurred
+active_minutes: 198 # estimated: 20:00 to 00:48 = 288 minutes elapsed, minus user's reported 90-minute cooking/dinner break
 exercise: 1
 phases: [start, guide, evaluate, wrap-up]
-mood_start: null # reported: curious and calm; numeric 1–5 rating not given
-mood_end: null # reported: similar to start, slightly uplifted by BigDecimal/Currency learning, amused by work overlap; numeric 1–5 rating not given
-energy: null # reported: medium, not tired or highly energetic; numeric 1–5 rating not given
-confidence_before: null # not asked
-confidence_after: null # not asked
+mood_start: 3 # reported, 1–5; initially described as curious and calm
+mood_end: 3 # reported, 1–5; similar to start, with a qualitative slight uplift from learning and dinner
+energy: 3 # reported, 1–5; initially described as medium
+confidence_before: 3 # reported, 1–5, on Exercise 1 domain modeling and monetary calculations
+confidence_after: 3.5 # reported, 1–5; user gave 3,5
 tools:
   - name: OpenCode
     model: gpt-6-luna
     source: observed
 ai:
-  helpfulness: null # not asked
+  helpfulness: 4 # reported, 1–5
   hints_requested: null # not formally counted during the session
   hint_levels: [concept, api, code-shape] # observed
   ai_wrote: [tests, scaffold, production-refactor, exercise-guide, session-log] # observed; production refactor explicitly authorized by user
@@ -69,12 +69,15 @@ commits: [6b4fdb5] # observed: Exercise 1 implementation and guide commit; sessi
 
 ## Notes
 
-- The user planned to spend 40 minutes, but did not report actual focused time;
-  the session included a cooking/wine break and crossed midnight.
-- Starting mood and energy, and the later mood change, were described
-  qualitatively rather than on the template's numeric scales. Numeric fields
-  remain `null` rather than guessed.
+- The user initially planned 40 minutes. Active time is estimated from the
+  reported 20:00 start and the observed 00:48 end, less the user-reported
+  90-minute cooking/dinner break; elapsed time includes that break.
+- Starting mood and energy, and the later mood change, were first described
+  qualitatively; the user later provided numeric ratings for the log.
 - The first `date` capture happened at 20:52 local time (-03:00), after work
   had started; the user reported the actual start as 20:00 BRT.
 - The model-selection analysis is included in the Exercise 1 guide appendix,
   not the series setup notes.
+- The user reported a reflective post-exercise conversation centered on:
+  “now that you learned and know the solution, what could/would you do
+  differently?” The user's answer was not reported.
