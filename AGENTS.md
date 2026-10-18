@@ -113,6 +113,12 @@ section of the series status page.
 
 - **When:** at the end of every working session, whatever the phase. Ask the
   user before closing a session that has no entry yet.
+- **Start capture:** at the beginning of each logged session, before repository
+  exploration or other task work, run `date '+%Y-%m-%d %H:%M %Z'` and retain
+  the observed local date, time, and timezone for the session entry. If the
+  capture happens after work began, do not present it as the start time; keep
+  the observed capture time and record any user-reported start separately with
+  its source. Do not confuse planned duration with active minutes.
 - **Where:** `docs/sessions/NN-YYYY-MM-DD-<slug>.md`, numbered from `00`, with
   the YAML front matter and sections from the template below.
 - **How:** fill observed fields yourself from `date`, `git`, the build, and
@@ -121,6 +127,10 @@ section of the series status page.
   unknown or skipped, and never guess the user's mood or opinion.
 - Mark each value's source in a comment: `observed` (from tools), `reported`
   (the user said it), or `estimated` (derived, with the method stated).
+- When the user notices that different models or tools reached similar
+  decisions, record it as a user-reported observation in the session notes.
+  Name other models only when the user identifies them, and do not treat
+  agreement between models as evidence that a decision is correct.
 - Record your own mistakes (wrong or overstated claims corrected during the
   session) honestly; they count toward the AI evaluation.
 - The repo is public. Session data such as mood, time, and cost is fine to

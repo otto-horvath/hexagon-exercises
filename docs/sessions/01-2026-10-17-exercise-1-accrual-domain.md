@@ -1,13 +1,13 @@
 ---
 session: 1
 date: 2026-10-17 # observed: local date at session start
-start: "20:52" # observed, local time (-03:00)
+start: "20:00" # reported by user as 8pm BRT (-03:00); first date capture was 20:52
 end: "00:48" # observed, local time (-03:00), following calendar day
 active_minutes: null # user planned 40 minutes; actual focused time not reported, cooking/wine break occurred
 exercise: 1
 phases: [start, guide, evaluate, wrap-up]
 mood_start: null # reported: curious and calm; numeric 1–5 rating not given
-mood_end: null # reported: pasta and wine improved mood; numeric 1–5 rating not given
+mood_end: null # reported: similar to start, slightly uplifted by BigDecimal/Currency learning, amused by work overlap; numeric 1–5 rating not given
 energy: null # reported: medium, not tired or highly energetic; numeric 1–5 rating not given
 confidence_before: null # not asked
 confidence_after: null # not asked
@@ -40,6 +40,10 @@ commits: [6b4fdb5] # observed: Exercise 1 implementation and guide commit; sessi
 - Replaced independently supplied conventions with selection from the
   balance's currency, preventing currency/convention mismatches.
 - Kept the current model after discussing task-based model selection.
+- The user noticed that this model's precision and method-naming choices
+  resembled decisions in their work project, and suggested tracking whether
+  different models converge on similar approaches. This is a user-reported
+  observation; the other model identities were not provided.
 
 ## Where AI helped
 
@@ -70,5 +74,7 @@ commits: [6b4fdb5] # observed: Exercise 1 implementation and guide commit; sessi
 - Starting mood and energy, and the later mood change, were described
   qualitatively rather than on the template's numeric scales. Numeric fields
   remain `null` rather than guessed.
+- The first `date` capture happened at 20:52 local time (-03:00), after work
+  had started; the user reported the actual start as 20:00 BRT.
 - The model-selection analysis is included in the Exercise 1 guide appendix,
   not the series setup notes.
