@@ -78,6 +78,6 @@ commits: [6b4fdb5] # observed: Exercise 1 implementation and guide commit; sessi
   had started; the user reported the actual start as 20:00 BRT.
 - The model-selection analysis is included in the Exercise 1 guide appendix,
   not the series setup notes.
-- The user reported a reflective post-exercise conversation centered on:
-  “now that you learned and know the solution, what could/would you do
-  differently?” The user's answer was not reported.
+- After dinner and wine, the user had a good conversation with his girlfriend
+  about life and the exercise, centered on the question: “Now that you know
+  the solution, what would you do differently?”
