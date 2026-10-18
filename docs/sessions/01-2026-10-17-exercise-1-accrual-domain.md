@@ -3,8 +3,8 @@ session: 1
 title: "Now that you know the solution, what would you do differently?" # reported reflection question
 date: 2026-10-17 # observed: local date at session start
 start: "20:00" # reported by user as 8pm BRT (-03:00); first date capture was 20:52
-end: "00:48" # observed, local time (-03:00), following calendar day
-active_minutes: 198 # estimated: 20:00 to 00:48 = 288 minutes elapsed, minus user's reported 90-minute cooking/dinner break
+end: "01:06" # observed, local time (-03:00), following calendar day
+active_minutes: 216 # estimated: 20:00 to 01:06 = 306 minutes elapsed, minus user's reported 90-minute cooking/dinner break
 exercise: 1
 phases: [start, guide, evaluate, wrap-up]
 mood_start: 3 # reported, 1–5; initially described as curious and calm
