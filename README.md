@@ -101,10 +101,10 @@ Dependencies point inward only: `adapter → application → domain`.
 Seven core exercises over about three weeks (two or three per week), plus an
 optional bonus in week four.
 
-| Week | Exercise | |
+| Week | Exercise | Status |
 |---|---|---|
 | 1 | 1. Accrual domain | solved |
-| 1 | 2. Accrue-interest use case | |
+| 1 | 2. Accrue-interest use case | solved |
 | 1–2 | 3. Month-end payout | |
 | 2 | 4. Scheduler as a driving adapter | |
 | 2–3 | 5. External API adapters | |
