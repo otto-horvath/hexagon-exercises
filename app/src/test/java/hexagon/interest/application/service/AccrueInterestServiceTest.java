@@ -26,9 +26,7 @@ class AccrueInterestServiceTest {
                 new RecordingInterestRateProvider(new AnnualRate(BigDecimal.ZERO)),
                 new RecordingAccrualRepository());
 
-        assertThatNullPointerException()
-                .isThrownBy(() -> service.accrue(null))
-                .withMessage("command");
+        assertThatNullPointerException().isThrownBy(() -> service.accrue(null)).withMessage("command");
     }
 
     @Test
