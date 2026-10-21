@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="530" viewBox="0 0 1120 530" role="img" aria-labelledby="title description">
+  <title id="title">Ports and adapters dependency and call directions</title>
+  <desc id="description">Driving adapters call the input port and application service. The service uses the domain and output ports. Driven adapters implement output ports. Compile-time dependencies point inward to the application and domain.</desc>
+  <defs>
+    <marker id="call-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb" />
+    </marker>
+    <marker id="dependency-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569" />
+    </marker>
+    <style>
+      text { font-family: system-ui, sans-serif; fill: #172033; }
+      .box { rx: 14; stroke-width: 2; }
+      .outer { fill: #f8fafc; stroke: #94a3b8; }
+      .port { fill: #eff6ff; stroke: #3b82f6; }
+      .core { fill: #ecfdf5; stroke: #10b981; }
+      .domain { fill: #f0fdf4; stroke: #16a34a; }
+      .heading { font-size: 18px; font-weight: 700; }
+      .detail { font-size: 14px; fill: #475569; }
+      .call { stroke: #2563eb; stroke-width: 3; fill: none; marker-end: url(#call-arrow); }
+      .dependency { stroke: #475569; stroke-width: 2.5; stroke-dasharray: 7 6; fill: none; marker-end: url(#dependency-arrow); }
+    </style>
+  </defs>
+
+  <text x="560" y="36" text-anchor="middle" class="heading">Ports and adapters: calls cross the boundary; dependencies point inward</text>
+
+  <rect x="28" y="110" width="190" height="100" class="box outer" />
+  <text x="123" y="145" text-anchor="middle" class="heading">Driving adapter</text>
+  <text x="123" y="172" text-anchor="middle" class="detail">Scheduler / HTTP</text>
+  <text x="123" y="192" text-anchor="middle" class="detail">(later exercises)</text>
+
+  <rect x="272" y="110" width="190" height="100" class="box port" />
+  <text x="367" y="145" text-anchor="middle" class="heading">Driving port</text>
+  <text x="367" y="172" text-anchor="middle" class="detail">AccrueInterest</text>
+  <text x="367" y="192" text-anchor="middle" class="detail">+ command</text>
+
+  <rect x="520" y="90" width="220" height="140" class="box core" />
+  <text x="630" y="130" text-anchor="middle" class="heading">Application service</text>
+  <text x="630" y="160" text-anchor="middle" class="detail">coordinates the use case</text>
+  <text x="630" y="186" text-anchor="middle" class="detail">constructor-injected ports</text>
+
+  <rect x="802" y="65" width="285" height="92" class="box port" />
+  <text x="944" y="101" text-anchor="middle" class="heading">Driven ports</text>
+  <text x="944" y="130" text-anchor="middle" class="detail">Balance · Rate · AccrualRepository</text>
+
+  <rect x="802" y="190" width="285" height="92" class="box outer" />
+  <text x="944" y="226" text-anchor="middle" class="heading">Driven adapters</text>
+  <text x="944" y="255" text-anchor="middle" class="detail">API clients · database</text>
+
+  <rect x="520" y="315" width="220" height="92" class="box domain" />
+  <text x="630" y="351" text-anchor="middle" class="heading">Domain</text>
+  <text x="630" y="380" text-anchor="middle" class="detail">InterestCalculator</text>
+
+  <path d="M218 160 H264" class="call" />
+  <path d="M462 160 H512" class="call" />
+  <path d="M740 142 H794" class="call" />
+  <path d="M944 157 V182" class="call" />
+  <path d="M630 230 V307" class="call" />
+
+  <text x="560" y="452" text-anchor="middle" class="detail" fill="#2563eb">━━▶ Runtime call direction</text>
+  <path d="M490 448 H540" class="call" />
+  <text x="560" y="492" text-anchor="middle" class="detail">- - ▶ Compile-time dependency direction (outer code depends on inner contracts)</text>
+  <path d="M405 487 H455" class="dependency" />
+</svg>
