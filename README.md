@@ -133,7 +133,7 @@ interest for a balance. No ports and no I/O: just the core.
 See the [Exercise 1 guide](docs/exercise-1-accrual-domain.md) for the domain
 decisions, precision policy, and lessons from the implementation.
 
-### 2. Accrue-interest use case
+### 2. Accrue-interest use case — solved
 
 Accrue one day of interest for an account: fetch the balance and the rate,
 calculate, and store the accrual.
@@ -148,6 +148,10 @@ calculate, and store the accrual.
 - Enforce the dependency rule with a first architecture test.
 
 **New in this step:** ArchUnit (first rule).
+
+See the [Exercise 2 guide](docs/exercise-2-accrue-interest-use-case.md) for
+the ports, application service, dependency rules, and lessons from the
+implementation.
 
 ### 3. Month-end payout
 
