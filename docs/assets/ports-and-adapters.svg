@@ -57,8 +57,8 @@
   <path d="M944 157 V182" class="call" />
   <path d="M630 230 V307" class="call" />
 
-  <text x="560" y="452" text-anchor="middle" class="detail" fill="#2563eb">━━▶ Runtime call direction</text>
-  <path d="M490 448 H540" class="call" />
-  <text x="560" y="492" text-anchor="middle" class="detail">- - ▶ Compile-time dependency direction (outer code depends on inner contracts)</text>
-  <path d="M405 487 H455" class="dependency" />
+  <path d="M115 448 H165" class="call" />
+  <text x="185" y="453" class="detail">Runtime call direction</text>
+  <path d="M115 487 H165" class="dependency" />
+  <text x="185" y="492" class="detail">Compile-time dependency direction (outer code depends on inner contracts)</text>
 </svg>
