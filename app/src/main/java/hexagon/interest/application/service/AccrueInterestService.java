@@ -28,6 +28,8 @@ public final class AccrueInterestService implements AccrueInterest {
 
     @Override
     public void accrue(AccrueInterestCommand command) {
+        Objects.requireNonNull(command, "command");
+
         var balanceAmount = balanceProvider.balanceFor(command.accountId(), command.currency(), command.date());
         var rate = interestRateProvider.rateFor(command.currency(), command.date());
 
