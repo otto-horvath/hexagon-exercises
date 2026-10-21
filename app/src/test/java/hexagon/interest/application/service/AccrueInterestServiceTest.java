@@ -1,6 +1,7 @@
 package hexagon.interest.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 import hexagon.interest.application.port.in.AccrueInterestCommand;
 import hexagon.interest.application.port.out.AccrualRepository;
@@ -17,6 +18,18 @@ class AccrueInterestServiceTest {
     private static final String ACCOUNT_ID = "account-123";
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final LocalDate DATE = LocalDate.of(2026, 10, 20);
+
+    @Test
+    void rejectsNullCommandAtTheUseCaseBoundary() {
+        var service = new AccrueInterestService(
+                new RecordingBalanceProvider(new Money(BigDecimal.ZERO, GBP)),
+                new RecordingInterestRateProvider(new AnnualRate(BigDecimal.ZERO)),
+                new RecordingAccrualRepository());
+
+        assertThatNullPointerException()
+                .isThrownBy(() -> service.accrue(null))
+                .withMessage("command");
+    }
 
     @Test
     void fetchesInputsCalculatesDailyInterestAndStoresTheAccrual() {
