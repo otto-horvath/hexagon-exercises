@@ -11,7 +11,9 @@ import hexagon.interest.domain.AnnualRate;
 import hexagon.interest.domain.Money;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Currency;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class AccrueInterestServiceTest {
@@ -99,6 +101,11 @@ class AccrueInterestServiceTest {
             this.currency = currency;
             this.date = date;
             this.accrual = accrual;
+        }
+
+        @Override
+        public List<hexagon.interest.domain.Accrual> findForMonth(String accountId, YearMonth month) {
+            throw new UnsupportedOperationException();
         }
     }
 }
