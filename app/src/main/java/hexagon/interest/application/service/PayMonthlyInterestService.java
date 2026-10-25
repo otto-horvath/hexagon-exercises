@@ -5,17 +5,42 @@ import hexagon.interest.application.port.in.PayMonthlyInterestCommand;
 import hexagon.interest.application.port.out.AccrualRepository;
 import hexagon.interest.application.port.out.InterestEventPublisher;
 import hexagon.interest.application.port.out.PayoutRepository;
+import hexagon.interest.domain.Accrual;
+import hexagon.interest.domain.InterestPaid;
+import hexagon.interest.domain.InterestPayout;
+import hexagon.interest.domain.Money;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public final class PayMonthlyInterestService implements PayMonthlyInterest {
+    private final AccrualRepository accrualRepository;
+    private final PayoutRepository payoutRepository;
+    private final InterestEventPublisher interestEventPublisher;
+
     public PayMonthlyInterestService(
             AccrualRepository accrualRepository,
             PayoutRepository payoutRepository,
             InterestEventPublisher eventPublisher) {
-        throw new UnsupportedOperationException();
+        this.accrualRepository = accrualRepository;
+        this.payoutRepository = payoutRepository;
+        this.interestEventPublisher = eventPublisher;
     }
 
     @Override
     public void pay(PayMonthlyInterestCommand command) {
-        throw new UnsupportedOperationException();
+        Objects.requireNonNull(command, "command");
+
+        List<Accrual> accruals = accrualRepository.findForMonth(command.accountId(), command.month());
+
+        var payouts = accruals.stream()
+                .collect(Collectors.toMap(accrual -> accrual.amount().currency(), Accrual::amount, Money::add));
+
+        payouts.values().stream()
+                .map(money -> new InterestPayout(command.accountId(), command.month(), money.roundToMinorUnit()))
+                .forEach(interest -> payoutRepository.save(interest));
+        payouts.values().stream()
+                .map(money -> new InterestPaid(command.accountId(), command.month(), money.roundToMinorUnit()))
+                .forEach(interest -> interestEventPublisher.publish(interest));
     }
 }
