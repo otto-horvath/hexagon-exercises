@@ -15,7 +15,9 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class PayMonthlyInterestServiceTest {
@@ -48,6 +50,24 @@ class PayMonthlyInterestServiceTest {
                         new InterestPaid(ACCOUNT_ID, MONTH, new Money(new BigDecimal("0.01"), USD)));
     }
 
+    @Test
+    void repeatedPayoutRequestSavesAndPublishesOnlyOnce() {
+        var accruals = new RecordingAccrualRepository(
+                List.of(new Accrual(ACCOUNT_ID, LocalDate.of(2026, 10, 1), new Money(new BigDecimal("1.25"), GBP))));
+        var payouts = new RecordingPayoutRepository();
+        var events = new RecordingInterestEventPublisher();
+        var service = new PayMonthlyInterestService(accruals, payouts, events);
+        var command = new PayMonthlyInterestCommand(ACCOUNT_ID, MONTH);
+
+        service.pay(command);
+        service.pay(command);
+
+        assertThat(payouts.saved)
+                .containsExactly(new InterestPayout(ACCOUNT_ID, MONTH, new Money(new BigDecimal("1.25"), GBP)));
+        assertThat(events.published)
+                .containsExactly(new InterestPaid(ACCOUNT_ID, MONTH, new Money(new BigDecimal("1.25"), GBP)));
+    }
+
     private static final class RecordingAccrualRepository implements AccrualRepository {
         private final List<Accrual> result;
         private String accountId;
@@ -72,11 +92,19 @@ class PayMonthlyInterestServiceTest {
 
     private static final class RecordingPayoutRepository implements PayoutRepository {
         private final List<InterestPayout> saved = new ArrayList<>();
+        private final Set<PayoutKey> keys = new HashSet<>();
 
         @Override
-        public void save(InterestPayout payout) {
+        public boolean save(InterestPayout payout) {
+            var key = new PayoutKey(payout.accountId(), payout.amount().currency(), payout.month());
+            if (!keys.add(key)) {
+                return false;
+            }
             saved.add(payout);
+            return true;
         }
+
+        private record PayoutKey(String accountId, Currency currency, YearMonth month) {}
     }
 
     private static final class RecordingInterestEventPublisher implements InterestEventPublisher {
