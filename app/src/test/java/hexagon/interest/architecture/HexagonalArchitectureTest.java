@@ -33,4 +33,35 @@ class HexagonalArchitectureTest {
 
         rule.check(applicationClasses);
     }
+
+    @Test
+    void applicationPortsDoNotDependOnServices() {
+        ArchRule rule = noClasses()
+                .that()
+                .resideInAPackage("hexagon.interest.application.port..")
+                .should()
+                .dependOnClassesThat()
+                .resideInAPackage("hexagon.interest.application.service..");
+
+        rule.check(applicationClasses);
+    }
+
+    @Test
+    void drivingAndDrivenPortsDoNotDependOnEachOther() {
+        ArchRule drivingPortRule = noClasses()
+                .that()
+                .resideInAPackage("hexagon.interest.application.port.in..")
+                .should()
+                .dependOnClassesThat()
+                .resideInAPackage("hexagon.interest.application.port.out..");
+        ArchRule drivenPortRule = noClasses()
+                .that()
+                .resideInAPackage("hexagon.interest.application.port.out..")
+                .should()
+                .dependOnClassesThat()
+                .resideInAPackage("hexagon.interest.application.port.in..");
+
+        drivingPortRule.check(applicationClasses);
+        drivenPortRule.check(applicationClasses);
+    }
 }
