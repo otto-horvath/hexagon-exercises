@@ -105,7 +105,7 @@ optional bonus in week four.
 |---|---|---|
 | 1 | 1. Accrual domain | solved |
 | 1 | 2. Accrue-interest use case | solved |
-| 1–2 | 3. Month-end payout | |
+| 1–2 | 3. Month-end payout | solved |
 | 2 | 4. Scheduler as a driving adapter | |
 | 2–3 | 5. External API adapters | |
 | 3 | 6. Persistence and outbox | |
@@ -153,7 +153,7 @@ See the [Exercise 2 guide](docs/exercise-2-accrue-interest-use-case.md) for
 the ports, application service, dependency rules, and lessons from the
 implementation.
 
-### 3. Month-end payout
+### 3. Month-end payout — solved
 
 Pay the month's accrued interest per account and currency, exactly once.
 
