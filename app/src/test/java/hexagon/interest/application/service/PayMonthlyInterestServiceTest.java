@@ -10,6 +10,7 @@ import hexagon.interest.domain.Accrual;
 import hexagon.interest.domain.InterestPaid;
 import hexagon.interest.domain.InterestPayout;
 import hexagon.interest.domain.Money;
+import hexagon.interest.domain.PayoutResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -95,13 +96,13 @@ class PayMonthlyInterestServiceTest {
         private final Set<PayoutKey> keys = new HashSet<>();
 
         @Override
-        public boolean save(InterestPayout payout) {
+        public PayoutResult save(InterestPayout payout) {
             var key = new PayoutKey(payout.accountId(), payout.amount().currency(), payout.month());
             if (!keys.add(key)) {
-                return false;
+                return new PayoutResult.AlreadyPaid();
             }
             saved.add(payout);
-            return true;
+            return new PayoutResult.NewlyPaid(payout);
         }
 
         private record PayoutKey(String accountId, Currency currency, YearMonth month) {}
