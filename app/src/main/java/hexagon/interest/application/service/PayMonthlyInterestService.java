@@ -37,10 +37,16 @@ public final class PayMonthlyInterestService implements PayMonthlyInterest {
         var payouts = accruals.stream()
                 .collect(Collectors.toMap(accrual -> accrual.amount().currency(), Accrual::amount, Money::add));
 
-        payouts.values().stream()
+        var payoutResults = payouts.values().stream()
                 .map(money -> new InterestPayout(command.accountId(), command.month(), money.roundToMinorUnit()))
                 .map(interest -> payoutRepository.save(interest))
+                .toList();
+
+        var payoutsToPublish = payoutResults.stream()
                 .filter(PayoutResult.NewlyPaid.class::isInstance)
+                .toList();
+
+        payoutsToPublish.stream()
                 .map(result -> (PayoutResult.NewlyPaid) result)
                 .map(PayoutResult.NewlyPaid::payout)
                 .map(interest -> new InterestPaid(command.accountId(), command.month(), interest.amount()))
