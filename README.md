@@ -166,6 +166,9 @@ Pay the month's accrued interest per account and currency, exactly once.
 
 **New in this step:** more ArchUnit rules.
 
+See the [Exercise 3 guide](docs/exercise-3-month-end-payout.md) for the payout
+flow, idempotency, domain events, and lessons from the implementation.
+
 ### 4. Scheduler as a driving adapter
 
 Trigger the daily accrual and the month-end payout from scheduled jobs.
@@ -239,6 +242,10 @@ Every working session is logged under [docs/sessions/](docs/sessions/):
 time, mood, confidence, tech added, how the AI tools and models helped, and
 what each Claude Code session used in tokens and cost
 ([scripts/claude_usage.py](scripts/claude_usage.py)).
+When concluding a session, update this README whenever the session completes
+an exercise or produces a learnings guide: mark its schedule status, mark the
+exercise heading as solved, and add a link to the guide. Do this in the same
+session so the exercise overview always points to the completed learnings.
 When the series is finished, those logs feed a series status page with data
 and an honest opinion on the AI-assisted workflow.
 
