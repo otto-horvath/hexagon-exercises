@@ -69,6 +69,23 @@ class PayMonthlyInterestServiceTest {
                 .containsExactly(new InterestPaid(ACCOUNT_ID, MONTH, new Money(new BigDecimal("1.25"), GBP)));
     }
 
+    @Test
+    void includesAccrualsFromBothSidesOfAMidMonthRateChange() {
+        var accruals = new RecordingAccrualRepository(List.of(
+                new Accrual(ACCOUNT_ID, LocalDate.of(2026, 10, 14), new Money(new BigDecimal("0.05"), GBP)),
+                new Accrual(ACCOUNT_ID, LocalDate.of(2026, 10, 15), new Money(new BigDecimal("0.10"), GBP))));
+        var payouts = new RecordingPayoutRepository();
+        var events = new RecordingInterestEventPublisher();
+        var service = new PayMonthlyInterestService(accruals, payouts, events);
+
+        service.pay(new PayMonthlyInterestCommand(ACCOUNT_ID, MONTH));
+
+        assertThat(payouts.saved)
+                .containsExactly(new InterestPayout(ACCOUNT_ID, MONTH, new Money(new BigDecimal("0.15"), GBP)));
+        assertThat(events.published)
+                .containsExactly(new InterestPaid(ACCOUNT_ID, MONTH, new Money(new BigDecimal("0.15"), GBP)));
+    }
+
     private static final class RecordingAccrualRepository implements AccrualRepository {
         private final List<Accrual> result;
         private String accountId;
