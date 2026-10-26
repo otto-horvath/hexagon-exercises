@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public final class PayMonthlyInterestService implements PayMonthlyInterest {
     private final AccrualRepository accrualRepository;
     private final PayoutRepository payoutRepository;
-    private final InterestEventPublisher interestEventPublisher;
+    private final InterestEventPublisher eventPublisher;
 
     public PayMonthlyInterestService(
             AccrualRepository accrualRepository,
@@ -24,7 +24,7 @@ public final class PayMonthlyInterestService implements PayMonthlyInterest {
             InterestEventPublisher eventPublisher) {
         this.accrualRepository = accrualRepository;
         this.payoutRepository = payoutRepository;
-        this.interestEventPublisher = eventPublisher;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -38,9 +38,8 @@ public final class PayMonthlyInterestService implements PayMonthlyInterest {
 
         payouts.values().stream()
                 .map(money -> new InterestPayout(command.accountId(), command.month(), money.roundToMinorUnit()))
-                .forEach(interest -> payoutRepository.save(interest));
-        payouts.values().stream()
-                .map(money -> new InterestPaid(command.accountId(), command.month(), money.roundToMinorUnit()))
-                .forEach(interest -> interestEventPublisher.publish(interest));
+                .filter(interest -> payoutRepository.save(interest))
+                .map(payout -> new InterestPaid(command.accountId(), command.month(), payout.amount()))
+                .forEach(interest -> eventPublisher.publish(interest));
     }
 }
