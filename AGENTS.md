@@ -68,7 +68,11 @@ improvements; the user decides which to apply.
 - Ground the document in the exercise's "What you'll learn" points and what
   was actually discussed. Match the format of earlier documents in `docs/`.
 - End the document with Remo's strip (see "Mascot: Remo").
-- Update README.md: mark the exercise "— solved" and link its document.
+- Before handing a completed exercise PR to the user for review, update
+  `README.md` on the exercise branch: mark the schedule row solved, mark the
+  exercise heading "— solved", and link its guide. Verify that this README
+  change is included in the PR before asking the user to review it. Never defer
+  this update to a separate post-merge commit on `master`.
 - Commit and open a pull request only when the user asks.
 
 ## Mascot: Remo
