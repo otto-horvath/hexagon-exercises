@@ -9,6 +9,7 @@ import hexagon.interest.domain.Accrual;
 import hexagon.interest.domain.InterestPaid;
 import hexagon.interest.domain.InterestPayout;
 import hexagon.interest.domain.Money;
+import hexagon.interest.domain.PayoutResult;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,8 +39,11 @@ public final class PayMonthlyInterestService implements PayMonthlyInterest {
 
         payouts.values().stream()
                 .map(money -> new InterestPayout(command.accountId(), command.month(), money.roundToMinorUnit()))
-                .filter(interest -> payoutRepository.save(interest))
-                .map(payout -> new InterestPaid(command.accountId(), command.month(), payout.amount()))
-                .forEach(interest -> eventPublisher.publish(interest));
+                .map(interest -> payoutRepository.save(interest))
+                .filter(PayoutResult.NewlyPaid.class::isInstance)
+                .map(result -> (PayoutResult.NewlyPaid) result)
+                .map(PayoutResult.NewlyPaid::payout)
+                .map(interest -> new InterestPaid(command.accountId(), command.month(), interest.amount()))
+                .forEach(event -> eventPublisher.publish(event));
     }
 }
