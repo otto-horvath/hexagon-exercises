@@ -65,6 +65,13 @@ and guard them as adapters and use cases are added.
 - Additional ArchUnit rules protect port boundaries.
 - Final result: **35 tests passed**, and `./gradlew build` succeeded.
 
+## A question to carry forward
+
+The service records payouts and publishes their events in separate operations.
+What happens if one operation succeeds and the next one fails? What would a
+retry do, and how could the system make sure no business event is lost? Keep
+this failure scenario in mind as the application gains persistent adapters.
+
 ## Further reading
 
 - Alistair Cockburn, [Hexagonal Architecture (Ports and Adapters)](https://alistair.cockburn.us/hexagonal-architecture/), the original article.
