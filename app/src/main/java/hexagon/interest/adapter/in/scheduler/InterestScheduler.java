@@ -58,7 +58,7 @@ public final class InterestScheduler {
 
         accrualForPeriod(currentDate)
                 .forEach(accrualDate -> accounts.stream()
-                        .map(account -> new AccrueInterestCommand(account.accountId(), account.currency(), accrualDate))
+                        .map(account -> accrualCommand(account, accrualDate))
                         .forEach(accrueInterest::accrue));
 
         lastAccruedDate = currentDate;
@@ -75,8 +75,16 @@ public final class InterestScheduler {
         accounts.stream()
                 .map(AccountCurrency::accountId)
                 .distinct()
-                .map(accountId -> new PayMonthlyInterestCommand(accountId, payoutYearMonth))
+                .map(accountId -> payoutCommand(accountId, payoutYearMonth))
                 .forEach(payMonthlyInterest::pay);
+    }
+
+    private AccrueInterestCommand accrualCommand(AccountCurrency account, LocalDate date) {
+        return new AccrueInterestCommand(account.accountId(), account.currency(), date);
+    }
+
+    private PayMonthlyInterestCommand payoutCommand(String accountId, YearMonth month) {
+        return new PayMonthlyInterestCommand(accountId, month);
     }
 
     private Stream<LocalDate> accrualForPeriod(LocalDate currentDate) {
