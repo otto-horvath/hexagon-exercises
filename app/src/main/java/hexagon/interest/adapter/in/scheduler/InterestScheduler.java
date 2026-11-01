@@ -1,7 +1,9 @@
 package hexagon.interest.adapter.in.scheduler;
 
 import hexagon.interest.application.port.in.AccrueInterest;
+import hexagon.interest.application.port.in.AccrueInterestCommand;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +19,9 @@ public final class InterestScheduler {
     }
 
     public void runDaily() {
-        throw new UnsupportedOperationException("TODO: accrue interest for every configured account and currency");
+        accounts.stream()
+                .map(account ->
+                        new AccrueInterestCommand(account.accountId(), account.currency(), LocalDate.now(clock)))
+                .forEach(accrueInterest::accrue);
     }
 }
