@@ -77,15 +77,8 @@ public final class InterestScheduler {
     }
 
     private Stream<LocalDate> accrualForPeriod(LocalDate currentDate) {
-        if (lastAccruedDate == null) {
-            lastAccruedDate = currentDate;
-            return lastAccruedDate.datesUntil(currentDate.plusDays(1));
-        }
+        var firstDate = lastAccruedDate == null ? currentDate : lastAccruedDate.plusDays(1);
 
-        if (lastAccruedDate.equals(currentDate)) {
-            return Stream.empty();
-        }
-
-        return lastAccruedDate.plusDays(1).datesUntil(currentDate.plusDays(1));
+        return firstDate.datesUntil(currentDate.plusDays(1));
     }
 }
