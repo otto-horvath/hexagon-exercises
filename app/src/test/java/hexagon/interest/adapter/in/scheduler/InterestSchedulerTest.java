@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import hexagon.interest.application.port.in.AccrueInterest;
 import hexagon.interest.application.port.in.AccrueInterestCommand;
+import hexagon.interest.application.port.in.PayMonthlyInterest;
+import hexagon.interest.application.port.in.PayMonthlyInterestCommand;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -26,6 +28,7 @@ class InterestSchedulerTest {
         var scheduler = new InterestScheduler(
                 Clock.fixed(Instant.parse("2026-11-01T12:00:00Z"), ZoneOffset.UTC),
                 accruals,
+                new RecordingPayMonthlyInterest(),
                 List.of(new AccountCurrency(ACCOUNT_ID, GBP), new AccountCurrency(ACCOUNT_ID, USD)));
 
         scheduler.runDaily();
@@ -40,7 +43,8 @@ class InterestSchedulerTest {
     void accruesEveryMissedDayAcrossMonthEndAndLeapDay() {
         var clock = new MutableClock(LocalDate.of(2028, 2, 27));
         var accruals = new RecordingAccrueInterest();
-        var scheduler = new InterestScheduler(clock, accruals, List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler = new InterestScheduler(
+                clock, accruals, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
 
         scheduler.runDaily();
         clock.setToday(LocalDate.of(2028, 3, 2));
@@ -59,23 +63,13 @@ class InterestSchedulerTest {
     void doesNotAccrueTheSameDayTwice() {
         var clock = new MutableClock(TODAY);
         var accruals = new RecordingAccrueInterest();
-        var scheduler = new InterestScheduler(clock, accruals, List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler = new InterestScheduler(
+                clock, accruals, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
 
         scheduler.runDaily();
         scheduler.runDaily();
 
         assertThat(accruals.commands).containsExactly(accrual(TODAY));
-    }
-
-    @Test
-    void returnDaterange() {
-        var clock = new MutableClock(LocalDate.of(2028, 2, 27));
-
-        var lastDate = LocalDate.now(clock);
-        clock.setToday(LocalDate.of(2028, 3, 2));
-        var currentDate = LocalDate.now(clock);
-
-        lastDate.datesUntil(currentDate.plusDays(1)).forEach(System.out::println);
     }
 
     private static AccrueInterestCommand accrual(LocalDate date) {
@@ -115,6 +109,15 @@ class InterestSchedulerTest {
 
         @Override
         public void accrue(AccrueInterestCommand command) {
+            commands.add(command);
+        }
+    }
+
+    private static final class RecordingPayMonthlyInterest implements PayMonthlyInterest {
+        private final List<PayMonthlyInterestCommand> commands = new ArrayList<>();
+
+        @Override
+        public void pay(PayMonthlyInterestCommand command) {
             commands.add(command);
         }
     }
