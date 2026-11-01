@@ -1,6 +1,7 @@
 package hexagon.interest.adapter.in.scheduler;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import hexagon.interest.application.port.in.AccrueInterest;
@@ -27,6 +28,26 @@ class InterestSchedulerTest {
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final Currency USD = Currency.getInstance("USD");
     private static final LocalDate TODAY = LocalDate.of(2026, 11, 1);
+
+    @Test
+    void rejectsNullConstructorArguments() {
+        var accruals = new RecordingAccrueInterest();
+        var payouts = new RecordingPayMonthlyInterest();
+        var scheduledAccounts = List.of(new AccountCurrency(ACCOUNT_ID, GBP));
+
+        assertThatNullPointerException()
+                .isThrownBy(() -> new InterestScheduler(null, accruals, payouts, scheduledAccounts))
+                .withMessage("clock");
+        assertThatNullPointerException()
+                .isThrownBy(() -> new InterestScheduler(Clock.systemUTC(), null, payouts, scheduledAccounts))
+                .withMessage("accrueInterest");
+        assertThatNullPointerException()
+                .isThrownBy(() -> new InterestScheduler(Clock.systemUTC(), accruals, null, scheduledAccounts))
+                .withMessage("payMonthlyInterest");
+        assertThatNullPointerException()
+                .isThrownBy(() -> new InterestScheduler(Clock.systemUTC(), accruals, payouts, null))
+                .withMessage("scheduledAccounts");
+    }
 
     @Test
     void accruesTodayForEveryConfiguredAccountAndCurrency() {
