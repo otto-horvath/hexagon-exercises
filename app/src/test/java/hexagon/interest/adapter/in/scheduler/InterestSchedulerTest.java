@@ -15,6 +15,9 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
 class InterestSchedulerTest {
@@ -105,6 +108,82 @@ class InterestSchedulerTest {
         scheduler.runMonthly();
 
         assertThat(payouts.commands).isEmpty();
+    }
+
+    @Test
+    void skipsADailyRunWhenTheClockRollsOverWhileThePreviousOneIsStillRunning() throws InterruptedException {
+        var clock = new MutableClock(TODAY);
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var calls = new AtomicInteger();
+        AccrueInterest blockingAccrual = command -> {
+            calls.incrementAndGet();
+            clock.setToday(TODAY.plusDays(1));
+            entered.countDown();
+            await(release);
+        };
+        var scheduler = new InterestScheduler(
+                clock,
+                blockingAccrual,
+                new RecordingPayMonthlyInterest(),
+                List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        var first = runInBackground(scheduler::runDaily);
+        assertThat(entered.await(1, TimeUnit.SECONDS)).isTrue();
+
+        var second = runInBackground(scheduler::runDaily);
+        second.join(1_000);
+
+        assertThat(second.isAlive()).isFalse();
+        release.countDown();
+        first.join();
+
+        assertThat(calls).hasValue(1);
+    }
+
+    @Test
+    void skipsAMonthlyRunWhileThePreviousOneIsStillRunning() throws InterruptedException {
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var calls = new AtomicInteger();
+        PayMonthlyInterest blockingPayout = command -> {
+            calls.incrementAndGet();
+            entered.countDown();
+            await(release);
+        };
+        var scheduler = new InterestScheduler(
+                new MutableClock(LocalDate.of(2028, 3, 1)),
+                new RecordingAccrueInterest(),
+                blockingPayout,
+                List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        var first = runInBackground(scheduler::runMonthly);
+        assertThat(entered.await(1, TimeUnit.SECONDS)).isTrue();
+
+        var second = runInBackground(scheduler::runMonthly);
+        second.join(1_000);
+
+        assertThat(second.isAlive()).isFalse();
+        release.countDown();
+        first.join();
+
+        assertThat(calls).hasValue(1);
+    }
+
+    private static Thread runInBackground(Runnable runnable) {
+        var thread = new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+        return thread;
+    }
+
+    private static void await(CountDownLatch latch) {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(e);
+        }
     }
 
     private static AccrueInterestCommand accrual(LocalDate date) {
