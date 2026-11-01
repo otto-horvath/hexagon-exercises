@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 public final class InterestScheduler {
@@ -16,6 +17,8 @@ public final class InterestScheduler {
     private final AccrueInterest accrueInterest;
     private final PayMonthlyInterest payMonthlyInterest;
     private final List<AccountCurrency> accounts;
+    private final AtomicBoolean dailyRunning = new AtomicBoolean();
+    private final AtomicBoolean monthlyRunning = new AtomicBoolean();
 
     private LocalDate lastExecution;
 
@@ -31,27 +34,44 @@ public final class InterestScheduler {
     }
 
     public void runDaily() {
-        var currentDate = LocalDate.now(clock);
-
-        accrualForPeriod(currentDate)
-                .forEach(accrualDate -> accounts.stream()
-                        .map(account -> new AccrueInterestCommand(account.accountId(), account.currency(), accrualDate))
-                        .forEach(accrueInterest::accrue));
-    }
-
-    public void runMonthly() {
-        var currentDate = LocalDate.now(clock);
-
-        if (currentDate.getDayOfMonth() > 1) {
+        if (!dailyRunning.compareAndSet(false, true)) {
             return;
         }
 
-        var payoutYearMont = YearMonth.now(clock).minusMonths(1);
-        accounts.stream()
-                .map(AccountCurrency::accountId)
-                .distinct()
-                .map(accountId -> new PayMonthlyInterestCommand(accountId, payoutYearMont))
-                .forEach(payMonthlyInterest::pay);
+        try {
+            var currentDate = LocalDate.now(clock);
+
+            accrualForPeriod(currentDate)
+                    .forEach(accrualDate -> accounts.stream()
+                            .map(account ->
+                                    new AccrueInterestCommand(account.accountId(), account.currency(), accrualDate))
+                            .forEach(accrueInterest::accrue));
+        } finally {
+            dailyRunning.set(false);
+        }
+    }
+
+    public void runMonthly() {
+        if (!monthlyRunning.compareAndSet(false, true)) {
+            return;
+        }
+
+        try {
+            var currentDate = LocalDate.now(clock);
+
+            if (currentDate.getDayOfMonth() > 1) {
+                return;
+            }
+
+            var payoutYearMont = YearMonth.now(clock).minusMonths(1);
+            accounts.stream()
+                    .map(AccountCurrency::accountId)
+                    .distinct()
+                    .map(accountId -> new PayMonthlyInterestCommand(accountId, payoutYearMont))
+                    .forEach(payMonthlyInterest::pay);
+        } finally {
+            monthlyRunning.set(false);
+        }
     }
 
     private Stream<LocalDate> accrualForPeriod(LocalDate currentDate) {
