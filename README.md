@@ -74,6 +74,9 @@ accrued interest out.
                                   └────────┘    └────────────────────────────┘
 ```
 
+This is the target shape. The scheduler adapter exists today; the HTTP and
+driven adapters arrive in later exercises.
+
 All APIs, contracts, and data in this repository are invented for learning,
 built only from public concepts.
 
@@ -90,11 +93,64 @@ hexagon.interest
 │   ├── port.out            # driven ports: what the core needs from the outside
 │   └── service             # use-case implementations
 └── adapter
-    ├── in                  # scheduler, HTTP
-    └── out                 # API clients, persistence, event publishing
+    ├── in
+    │   ├── scheduler       # InterestScheduler, AccountCurrency (driving adapter)
+    │   └── http            # HTTP adapter (exercise 7)
+    └── out                 # API clients, persistence, event publishing (exercises 5–6)
 ```
 
 Dependencies point inward only: `adapter → application → domain`.
+
+## Where the components sit
+
+The domain is the core. Use-case services sit in the application ring around it,
+driving and driven ports mark the boundary, and adapters stay at the edges.
+Solid arrows are calls; dotted arrows are implementations supplied by driven
+adapters. Grey nodes are planned.
+
+```mermaid
+flowchart LR
+    subgraph driving["Driving edge"]
+        scheduler["InterestScheduler"]
+        http["HTTP API<br/>(exercise 7)"]
+    end
+
+    subgraph application["Application"]
+        direction TB
+        inPorts["Driving ports<br/>AccrueInterest<br/>PayMonthlyInterest"]
+        services["Use-case services<br/>AccrueInterestService<br/>PayMonthlyInterestService"]
+        outPorts["Driven ports<br/>BalanceProvider · InterestRateProvider<br/>AccrualRepository · PayoutRepository<br/>InterestEventPublisher"]
+    end
+
+    domain{{"Domain<br/>Money · AnnualRate · DayCountConvention<br/>InterestCalculator · Accrual<br/>InterestPayout · PayoutResult · InterestPaid"}}
+
+    subgraph driven["Driven edge"]
+        rates["Rates API client<br/>(exercise 5)"]
+        balances["Balance API client<br/>(exercise 5)"]
+        persistence["JDBC repositories<br/>(exercise 6)"]
+        outbox["Outbox publisher<br/>(exercise 6)"]
+    end
+
+    scheduler --> inPorts
+    http --> inPorts
+    inPorts -->|handled by| services
+    services --> domain
+    services --> outPorts
+    outPorts -. implemented by .-> rates
+    outPorts -. implemented by .-> balances
+    outPorts -. implemented by .-> persistence
+    outPorts -. implemented by .-> outbox
+
+    classDef edge fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
+    classDef app fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
+    classDef core fill:#fff8e1,stroke:#f9a825,color:#5d4037
+    classDef planned fill:#f5f5f5,stroke:#9e9e9e,stroke-dasharray:5 5,color:#616161
+    class scheduler edge
+    class http planned
+    class inPorts,services,outPorts app
+    class domain core
+    class rates,balances,persistence,outbox planned
+```
 
 ## Schedule
 
