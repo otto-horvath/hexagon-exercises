@@ -1,6 +1,7 @@
 package hexagon.interest.adapter.in.scheduler;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import hexagon.interest.application.port.in.AccrueInterest;
 import hexagon.interest.application.port.in.AccrueInterestCommand;
@@ -75,6 +76,25 @@ class InterestSchedulerTest {
         scheduler.runDaily();
 
         assertThat(accruals.commands).containsExactly(accrual(TODAY));
+    }
+
+    @Test
+    void retriesTheFirstDayWhenTheInitialRunFails() {
+        var clock = new MutableClock(TODAY);
+        var calls = new AtomicInteger();
+        AccrueInterest failingOnce = command -> {
+            if (calls.getAndIncrement() == 0) {
+                throw new IllegalStateException("balance provider unavailable");
+            }
+        };
+        var scheduler = new InterestScheduler(
+                clock, failingOnce, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        assertThatThrownBy(scheduler::runDaily).isInstanceOf(IllegalStateException.class);
+
+        scheduler.runDaily();
+
+        assertThat(calls).hasValue(2);
     }
 
     @Test
