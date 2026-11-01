@@ -7,11 +7,11 @@ import hexagon.interest.application.port.in.AccrueInterest;
 import hexagon.interest.application.port.in.AccrueInterestCommand;
 import hexagon.interest.application.port.in.PayMonthlyInterest;
 import hexagon.interest.application.port.in.PayMonthlyInterestCommand;
+import hexagon.interest.testsupport.MutableClock;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -231,34 +231,6 @@ class InterestSchedulerTest {
 
     private static AccrueInterestCommand accrual(LocalDate date) {
         return new AccrueInterestCommand(ACCOUNT_ID, GBP, date);
-    }
-
-    private static final class MutableClock extends Clock {
-        private final ZoneId zone = ZoneOffset.UTC;
-        private Instant instant;
-
-        private MutableClock(LocalDate today) {
-            setToday(today);
-        }
-
-        private void setToday(LocalDate today) {
-            this.instant = today.atStartOfDay(zone).toInstant();
-        }
-
-        @Override
-        public ZoneId getZone() {
-            return zone;
-        }
-
-        @Override
-        public Clock withZone(ZoneId zone) {
-            return Clock.fixed(instant, zone);
-        }
-
-        @Override
-        public Instant instant() {
-            return instant;
-        }
     }
 
     private static final class RecordingAccrueInterest implements AccrueInterest {
