@@ -35,6 +35,18 @@ class HexagonalArchitectureTest {
     }
 
     @Test
+    void drivingAdaptersDoNotDependOnApplicationServices() {
+        ArchRule rule = noClasses()
+                .that()
+                .resideInAPackage("hexagon.interest.adapter.in..")
+                .should()
+                .dependOnClassesThat()
+                .resideInAPackage("hexagon.interest.application.service..");
+
+        rule.check(applicationClasses);
+    }
+
+    @Test
     void applicationPortsDoNotDependOnServices() {
         ArchRule rule = noClasses()
                 .that()
