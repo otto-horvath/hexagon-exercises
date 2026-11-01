@@ -7,6 +7,7 @@ import hexagon.interest.application.port.in.AccrueInterestCommand;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -33,6 +34,80 @@ class InterestSchedulerTest {
                 .containsExactly(
                         new AccrueInterestCommand(ACCOUNT_ID, GBP, TODAY),
                         new AccrueInterestCommand(ACCOUNT_ID, USD, TODAY));
+    }
+
+    @Test
+    void accruesEveryMissedDayAcrossMonthEndAndLeapDay() {
+        var clock = new MutableClock(LocalDate.of(2028, 2, 27));
+        var accruals = new RecordingAccrueInterest();
+        var scheduler = new InterestScheduler(clock, accruals, List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        scheduler.runDaily();
+        clock.setToday(LocalDate.of(2028, 3, 2));
+        scheduler.runDaily();
+
+        assertThat(accruals.commands)
+                .containsExactly(
+                        accrual(LocalDate.of(2028, 2, 27)),
+                        accrual(LocalDate.of(2028, 2, 28)),
+                        accrual(LocalDate.of(2028, 2, 29)),
+                        accrual(LocalDate.of(2028, 3, 1)),
+                        accrual(LocalDate.of(2028, 3, 2)));
+    }
+
+    @Test
+    void doesNotAccrueTheSameDayTwice() {
+        var clock = new MutableClock(TODAY);
+        var accruals = new RecordingAccrueInterest();
+        var scheduler = new InterestScheduler(clock, accruals, List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        scheduler.runDaily();
+        scheduler.runDaily();
+
+        assertThat(accruals.commands).containsExactly(accrual(TODAY));
+    }
+
+    @Test
+    void returnDaterange() {
+        var clock = new MutableClock(LocalDate.of(2028, 2, 27));
+
+        var lastDate = LocalDate.now(clock);
+        clock.setToday(LocalDate.of(2028, 3, 2));
+        var currentDate = LocalDate.now(clock);
+
+        lastDate.datesUntil(currentDate.plusDays(1)).forEach(System.out::println);
+    }
+
+    private static AccrueInterestCommand accrual(LocalDate date) {
+        return new AccrueInterestCommand(ACCOUNT_ID, GBP, date);
+    }
+
+    private static final class MutableClock extends Clock {
+        private final ZoneId zone = ZoneOffset.UTC;
+        private Instant instant;
+
+        private MutableClock(LocalDate today) {
+            setToday(today);
+        }
+
+        private void setToday(LocalDate today) {
+            this.instant = today.atStartOfDay(zone).toInstant();
+        }
+
+        @Override
+        public ZoneId getZone() {
+            return zone;
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return Clock.fixed(instant, zone);
+        }
+
+        @Override
+        public Instant instant() {
+            return instant;
+        }
     }
 
     private static final class RecordingAccrueInterest implements AccrueInterest {
