@@ -31,11 +31,12 @@ class InterestSchedulerTest {
     @Test
     void accruesTodayForEveryConfiguredAccountAndCurrency() {
         var accruals = new RecordingAccrueInterest();
-        var scheduler = new InterestScheduler(
+        var scheduler = newScheduler(
                 Clock.fixed(Instant.parse("2026-11-01T12:00:00Z"), ZoneOffset.UTC),
                 accruals,
                 new RecordingPayMonthlyInterest(),
-                List.of(new AccountCurrency(ACCOUNT_ID, GBP), new AccountCurrency(ACCOUNT_ID, USD)));
+                new AccountCurrency(ACCOUNT_ID, GBP),
+                new AccountCurrency(ACCOUNT_ID, USD));
 
         scheduler.runDaily();
 
@@ -49,8 +50,8 @@ class InterestSchedulerTest {
     void accruesEveryMissedDayAcrossMonthEndAndLeapDay() {
         var clock = new MutableClock(LocalDate.of(2028, 2, 27));
         var accruals = new RecordingAccrueInterest();
-        var scheduler = new InterestScheduler(
-                clock, accruals, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler =
+                newScheduler(clock, accruals, new RecordingPayMonthlyInterest(), new AccountCurrency(ACCOUNT_ID, GBP));
 
         scheduler.runDaily();
         clock.setToday(LocalDate.of(2028, 3, 2));
@@ -69,8 +70,8 @@ class InterestSchedulerTest {
     void doesNotAccrueTheSameDayTwice() {
         var clock = new MutableClock(TODAY);
         var accruals = new RecordingAccrueInterest();
-        var scheduler = new InterestScheduler(
-                clock, accruals, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler =
+                newScheduler(clock, accruals, new RecordingPayMonthlyInterest(), new AccountCurrency(ACCOUNT_ID, GBP));
 
         scheduler.runDaily();
         scheduler.runDaily();
@@ -87,8 +88,8 @@ class InterestSchedulerTest {
                 throw new IllegalStateException("balance provider unavailable");
             }
         };
-        var scheduler = new InterestScheduler(
-                clock, failingOnce, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler = newScheduler(
+                clock, failingOnce, new RecordingPayMonthlyInterest(), new AccountCurrency(ACCOUNT_ID, GBP));
 
         assertThatThrownBy(scheduler::runDaily).isInstanceOf(IllegalStateException.class);
 
@@ -101,8 +102,8 @@ class InterestSchedulerTest {
     void accruesEachDayOnlyOnceAcrossConsecutiveRuns() {
         var clock = new MutableClock(LocalDate.of(2028, 2, 27));
         var accruals = new RecordingAccrueInterest();
-        var scheduler = new InterestScheduler(
-                clock, accruals, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler =
+                newScheduler(clock, accruals, new RecordingPayMonthlyInterest(), new AccountCurrency(ACCOUNT_ID, GBP));
 
         scheduler.runDaily();
         clock.setToday(LocalDate.of(2028, 2, 28));
@@ -124,14 +125,13 @@ class InterestSchedulerTest {
     void paysThePreviousMonthOnTheFirstDayForEachAccountOnce() {
         var clock = new MutableClock(LocalDate.of(2028, 3, 1));
         var payouts = new RecordingPayMonthlyInterest();
-        var scheduler = new InterestScheduler(
+        var scheduler = newScheduler(
                 clock,
                 new RecordingAccrueInterest(),
                 payouts,
-                List.of(
-                        new AccountCurrency(ACCOUNT_ID, GBP),
-                        new AccountCurrency(ACCOUNT_ID, USD),
-                        new AccountCurrency(SECOND_ACCOUNT_ID, GBP)));
+                new AccountCurrency(ACCOUNT_ID, GBP),
+                new AccountCurrency(ACCOUNT_ID, USD),
+                new AccountCurrency(SECOND_ACCOUNT_ID, GBP));
 
         scheduler.runMonthly();
 
@@ -145,8 +145,8 @@ class InterestSchedulerTest {
     void doesNotPayOnAnyOtherDay() {
         var clock = new MutableClock(LocalDate.of(2028, 2, 29));
         var payouts = new RecordingPayMonthlyInterest();
-        var scheduler = new InterestScheduler(
-                clock, new RecordingAccrueInterest(), payouts, List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler =
+                newScheduler(clock, new RecordingAccrueInterest(), payouts, new AccountCurrency(ACCOUNT_ID, GBP));
 
         scheduler.runMonthly();
 
@@ -165,11 +165,8 @@ class InterestSchedulerTest {
             entered.countDown();
             await(release);
         };
-        var scheduler = new InterestScheduler(
-                clock,
-                blockingAccrual,
-                new RecordingPayMonthlyInterest(),
-                List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+        var scheduler = newScheduler(
+                clock, blockingAccrual, new RecordingPayMonthlyInterest(), new AccountCurrency(ACCOUNT_ID, GBP));
 
         var first = runInBackground(scheduler::runDaily);
         assertThat(entered.await(1, TimeUnit.SECONDS)).isTrue();
@@ -194,11 +191,11 @@ class InterestSchedulerTest {
             entered.countDown();
             await(release);
         };
-        var scheduler = new InterestScheduler(
+        var scheduler = newScheduler(
                 new MutableClock(LocalDate.of(2028, 3, 1)),
                 new RecordingAccrueInterest(),
                 blockingPayout,
-                List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+                new AccountCurrency(ACCOUNT_ID, GBP));
 
         var first = runInBackground(scheduler::runMonthly);
         assertThat(entered.await(1, TimeUnit.SECONDS)).isTrue();
@@ -227,6 +224,11 @@ class InterestSchedulerTest {
             Thread.currentThread().interrupt();
             throw new IllegalStateException(e);
         }
+    }
+
+    private static InterestScheduler newScheduler(
+            Clock clock, AccrueInterest accruals, PayMonthlyInterest payouts, AccountCurrency... scheduledAccounts) {
+        return new InterestScheduler(clock, accruals, payouts, List.of(scheduledAccounts));
     }
 
     private static AccrueInterestCommand accrual(LocalDate date) {
