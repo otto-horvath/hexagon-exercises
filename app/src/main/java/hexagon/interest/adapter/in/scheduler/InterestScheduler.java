@@ -20,7 +20,7 @@ public final class InterestScheduler {
     private final AtomicBoolean dailyRunning = new AtomicBoolean();
     private final AtomicBoolean monthlyRunning = new AtomicBoolean();
 
-    private LocalDate lastExecution;
+    private LocalDate lastAccruedDate;
 
     public InterestScheduler(
             Clock clock,
@@ -46,6 +46,8 @@ public final class InterestScheduler {
                             .map(account ->
                                     new AccrueInterestCommand(account.accountId(), account.currency(), accrualDate))
                             .forEach(accrueInterest::accrue));
+
+            lastAccruedDate = currentDate;
         } finally {
             dailyRunning.set(false);
         }
@@ -75,15 +77,15 @@ public final class InterestScheduler {
     }
 
     private Stream<LocalDate> accrualForPeriod(LocalDate currentDate) {
-        if (lastExecution == null) {
-            lastExecution = LocalDate.now(clock);
-            return lastExecution.datesUntil(currentDate.plusDays(1));
+        if (lastAccruedDate == null) {
+            lastAccruedDate = currentDate;
+            return lastAccruedDate.datesUntil(currentDate.plusDays(1));
         }
 
-        if (lastExecution.equals(currentDate)) {
+        if (lastAccruedDate.equals(currentDate)) {
             return Stream.empty();
         }
 
-        return lastExecution.plusDays(1).datesUntil(currentDate.plusDays(1));
+        return lastAccruedDate.plusDays(1).datesUntil(currentDate.plusDays(1));
     }
 }
