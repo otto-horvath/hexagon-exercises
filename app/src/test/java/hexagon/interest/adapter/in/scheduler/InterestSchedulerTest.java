@@ -9,6 +9,7 @@ import hexagon.interest.application.port.in.PayMonthlyInterestCommand;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 class InterestSchedulerTest {
     private static final String ACCOUNT_ID = "account-123";
+    private static final String SECOND_ACCOUNT_ID = "account-456";
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final Currency USD = Currency.getInstance("USD");
     private static final LocalDate TODAY = LocalDate.of(2026, 11, 1);
@@ -70,6 +72,39 @@ class InterestSchedulerTest {
         scheduler.runDaily();
 
         assertThat(accruals.commands).containsExactly(accrual(TODAY));
+    }
+
+    @Test
+    void paysThePreviousMonthOnTheFirstDayForEachAccountOnce() {
+        var clock = new MutableClock(LocalDate.of(2028, 3, 1));
+        var payouts = new RecordingPayMonthlyInterest();
+        var scheduler = new InterestScheduler(
+                clock,
+                new RecordingAccrueInterest(),
+                payouts,
+                List.of(
+                        new AccountCurrency(ACCOUNT_ID, GBP),
+                        new AccountCurrency(ACCOUNT_ID, USD),
+                        new AccountCurrency(SECOND_ACCOUNT_ID, GBP)));
+
+        scheduler.runMonthly();
+
+        assertThat(payouts.commands)
+                .containsExactlyInAnyOrder(
+                        new PayMonthlyInterestCommand(ACCOUNT_ID, YearMonth.of(2028, 2)),
+                        new PayMonthlyInterestCommand(SECOND_ACCOUNT_ID, YearMonth.of(2028, 2)));
+    }
+
+    @Test
+    void doesNotPayOnAnyOtherDay() {
+        var clock = new MutableClock(LocalDate.of(2028, 2, 29));
+        var payouts = new RecordingPayMonthlyInterest();
+        var scheduler = new InterestScheduler(
+                clock, new RecordingAccrueInterest(), payouts, List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        scheduler.runMonthly();
+
+        assertThat(payouts.commands).isEmpty();
     }
 
     private static AccrueInterestCommand accrual(LocalDate date) {
