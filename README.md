@@ -106,7 +106,7 @@ optional bonus in week four.
 | 1 | 1. Accrual domain | solved |
 | 1 | 2. Accrue-interest use case | solved |
 | 1–2 | 3. Month-end payout | solved |
-| 2 | 4. Scheduler as a driving adapter | |
+| 2 | 4. Scheduler as a driving adapter | solved |
 | 2–3 | 5. External API adapters | |
 | 3 | 6. Persistence and outbox | |
 | 3 | 7. HTTP adapter and wiring | |
@@ -169,7 +169,7 @@ Pay the month's accrued interest per account and currency, exactly once.
 See the [Exercise 3 guide](docs/exercise-3-month-end-payout.md) for the payout
 flow, idempotency, domain events, and lessons from the implementation.
 
-### 4. Scheduler as a driving adapter
+### 4. Scheduler as a driving adapter — solved
 
 Model the daily accrual and the month-end payout as jobs in a driving adapter,
 with time injected through `Clock`. The executor that runs them is wired in
@@ -184,6 +184,10 @@ exercise 7.
 
 **New in this step:** `java.time.Clock`. The `ScheduledExecutorService`
 wiring is deferred to exercise 7.
+
+See the [Exercise 4 guide](docs/exercise-4-scheduler-driving-adapter.md) for
+the adapter boundaries, `Clock`-driven catch-up, overlap guard, and lessons
+from the implementation.
 
 ### 5. External API adapters
 
