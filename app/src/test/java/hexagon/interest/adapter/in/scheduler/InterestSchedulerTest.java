@@ -78,6 +78,29 @@ class InterestSchedulerTest {
     }
 
     @Test
+    void accruesEachDayOnlyOnceAcrossConsecutiveRuns() {
+        var clock = new MutableClock(LocalDate.of(2028, 2, 27));
+        var accruals = new RecordingAccrueInterest();
+        var scheduler = new InterestScheduler(
+                clock, accruals, new RecordingPayMonthlyInterest(), List.of(new AccountCurrency(ACCOUNT_ID, GBP)));
+
+        scheduler.runDaily();
+        clock.setToday(LocalDate.of(2028, 2, 28));
+        scheduler.runDaily();
+        clock.setToday(LocalDate.of(2028, 2, 29));
+        scheduler.runDaily();
+        clock.setToday(LocalDate.of(2028, 3, 1));
+        scheduler.runDaily();
+
+        assertThat(accruals.commands)
+                .containsExactly(
+                        accrual(LocalDate.of(2028, 2, 27)),
+                        accrual(LocalDate.of(2028, 2, 28)),
+                        accrual(LocalDate.of(2028, 2, 29)),
+                        accrual(LocalDate.of(2028, 3, 1)));
+    }
+
+    @Test
     void paysThePreviousMonthOnTheFirstDayForEachAccountOnce() {
         var clock = new MutableClock(LocalDate.of(2028, 3, 1));
         var payouts = new RecordingPayMonthlyInterest();
