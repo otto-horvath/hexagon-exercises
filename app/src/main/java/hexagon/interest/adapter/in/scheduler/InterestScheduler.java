@@ -3,8 +3,10 @@ package hexagon.interest.adapter.in.scheduler;
 import hexagon.interest.application.port.in.AccrueInterest;
 import hexagon.interest.application.port.in.AccrueInterestCommand;
 import hexagon.interest.application.port.in.PayMonthlyInterest;
+import hexagon.interest.application.port.in.PayMonthlyInterestCommand;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -38,7 +40,18 @@ public final class InterestScheduler {
     }
 
     public void runMonthly() {
-        throw new UnsupportedOperationException("TODO: pay the completed month once per configured account");
+        var currentDate = LocalDate.now(clock);
+
+        if (currentDate.getDayOfMonth() > 1) {
+            return;
+        }
+
+        var payoutYearMont = YearMonth.now(clock).minusMonths(1);
+        accounts.stream()
+                .map(AccountCurrency::accountId)
+                .distinct()
+                .map(accountId -> new PayMonthlyInterestCommand(accountId, payoutYearMont))
+                .forEach(payMonthlyInterest::pay);
     }
 
     private Stream<LocalDate> accrualForPeriod(LocalDate currentDate) {
