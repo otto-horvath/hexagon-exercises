@@ -16,7 +16,7 @@ public final class InterestScheduler {
     private final Clock clock;
     private final AccrueInterest accrueInterest;
     private final PayMonthlyInterest payMonthlyInterest;
-    private final List<AccountCurrency> accounts;
+    private final List<AccountCurrency> scheduledAccounts;
     private final AtomicBoolean dailyRunning = new AtomicBoolean();
     private final AtomicBoolean monthlyRunning = new AtomicBoolean();
 
@@ -26,11 +26,11 @@ public final class InterestScheduler {
             Clock clock,
             AccrueInterest accrueInterest,
             PayMonthlyInterest payMonthlyInterest,
-            List<AccountCurrency> accounts) {
+            List<AccountCurrency> scheduledAccounts) {
         this.clock = Objects.requireNonNull(clock, "clock");
         this.accrueInterest = Objects.requireNonNull(accrueInterest, "accrueInterest");
         this.payMonthlyInterest = Objects.requireNonNull(payMonthlyInterest, "payMonthlyInterest");
-        this.accounts = List.copyOf(Objects.requireNonNull(accounts, "accounts"));
+        this.scheduledAccounts = List.copyOf(Objects.requireNonNull(scheduledAccounts, "scheduledAccounts"));
     }
 
     public void runDaily() {
@@ -57,7 +57,7 @@ public final class InterestScheduler {
         var currentDate = LocalDate.now(clock);
 
         accrualForPeriod(currentDate)
-                .forEach(accrualDate -> accounts.stream()
+                .forEach(accrualDate -> scheduledAccounts.stream()
                         .map(account -> accrualCommand(account, accrualDate))
                         .forEach(accrueInterest::accrue));
 
@@ -72,7 +72,7 @@ public final class InterestScheduler {
         }
 
         var payoutYearMonth = YearMonth.from(currentDate).minusMonths(1);
-        accounts.stream()
+        scheduledAccounts.stream()
                 .map(AccountCurrency::accountId)
                 .distinct()
                 .map(accountId -> payoutCommand(accountId, payoutYearMonth))
