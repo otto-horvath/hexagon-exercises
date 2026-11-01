@@ -171,7 +171,9 @@ flow, idempotency, domain events, and lessons from the implementation.
 
 ### 4. Scheduler as a driving adapter
 
-Trigger the daily accrual and the month-end payout from scheduled jobs.
+Model the daily accrual and the month-end payout as jobs in a driving adapter,
+with time injected through `Clock`. The executor that runs them is wired in
+exercise 7.
 
 **What you'll learn**
 
@@ -180,7 +182,8 @@ Trigger the daily accrual and the month-end payout from scheduled jobs.
 - Catch up on missed days, and handle month ends and leap years.
 - Prevent overlapping job runs.
 
-**New in this step:** `ScheduledExecutorService`, `java.time.Clock`.
+**New in this step:** `java.time.Clock`. The `ScheduledExecutorService`
+wiring is deferred to exercise 7.
 
 ### 5. External API adapters
 
@@ -218,9 +221,11 @@ and wire the whole application by hand.
   scheduler.
 - Map between DTOs and the domain without leaking logic into adapters.
 - Build a composition root in `main` with manual dependency injection.
+- Start and stop the scheduler adapter with `ScheduledExecutorService`.
 - Enforce architecture rules across the whole application.
 
-**New in this step:** JDK `HttpServer`.
+**New in this step:** JDK `HttpServer`, `ScheduledExecutorService` (deferred
+from exercise 4).
 
 ### 8. Modules and a framework *(optional)*
 
